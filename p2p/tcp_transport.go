@@ -4,27 +4,24 @@ import (
 	"fmt"
 	"net"
 	"sync"
-
-	"golang.org/x/tools/go/analysis/passes/bools"
 )
 
 // TCPPeer represents the remote node over a TCP establsished connection
-type TCPPeer struct{
-// conn is the underlying connection to the peer
-conn net.Conn
+type TCPPeer struct {
+	// conn is the underlying connection to the peer
+	conn net.Conn
 
-//if we dial a conn => outbount == true
-//if we accept and receive a conn => outbount == false
-outbound bool
+	//if we dial a conn => outbount == true
+	//if we accept and receive a conn => outbount == false
+	outbound bool
 }
 
-func NewTCPPeer(conn net.Conn, outbound bool) *TCPPeer{
+func NewTCPPeer(conn net.Conn, outbound bool) *TCPPeer {
 	return &TCPPeer{
-    conn: conn,
-	outbound: outbound,
+		conn:     conn,
+		outbound: outbound,
 	}
 }
-
 
 type TCPTransport struct {
 	ListenAddress string
@@ -64,6 +61,7 @@ func (t *TCPTransport) startAcceptLoop() {
 	}
 }
 
-func (t *TCPTransport) handleConn(conn net.Conn){
-fmt.Printf("New incoming connection %+v\n", conn)
-} 
+func (t *TCPTransport) handleConn(conn net.Conn) {
+	peer := NewTCPPeer(conn, true)
+	fmt.Printf("New incoming connection %+v\n", peer)
+}
