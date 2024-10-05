@@ -7,7 +7,12 @@ import (
 )
 
 func main() {
-	tr := p2p.NewTCPTransport(":4000")
+	tcpOpts := p2p.TCPTransportOps{
+		ListenAddr: ":4000",
+		HandshakeFunc: p2p.NOPHandshakeFunc,
+		Decoder: p2p.GOBDecoder{},
+	}
+	tr := p2p.NewTCPTransport(tcpOpts)
 	if err := tr.ListenAndAccept(); err != nil {
 		log.Fatalf("failed to listen and accept: %v", err)
 	}
